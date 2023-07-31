@@ -20,3 +20,24 @@
 .sudoku-cell:focus {
   border-color: #007bff;
 }
+
+/* Add this style for the sudoku-cell-container */
+.sudoku-cell-container {
+  position: relative;
+}
+
+.pencil-marks {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.pencil-mark {
+  display: inline-block;
+  width: 25%;
+  text-align: center;
+  font-size: 9px;
+}
+

@@ -28,15 +28,15 @@ export function generatePencilMarks(board, row, col) {
     return Array.from(marks);
   }
   
-  // Function to update pencil marks for all empty cells
-  export function updatePencilMarks(board) {
+// Function to update pencil marks for all empty cells
+export function updatePencilMarks(board) {
     return board.map((row, rowIndex) =>
-      row.map((cellValue, colIndex) => {
-        if (cellValue === '') {
-          return generatePencilMarks(board, rowIndex, colIndex);
-        }
-        return [];
-      })
+        row.map((cellValue, colIndex) => {
+            if (cellValue === '') {
+                return generatePencilMarks(board, rowIndex, colIndex);
+            }
+            return [];
+        })
     );
-  }
+}
   

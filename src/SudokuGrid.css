@@ -15,6 +15,7 @@
   border: 1px solid #ccc;
   font-size: 18px;
   outline: none;
+  border: 1px solid #a09e9e;
 }
 
 .sudoku-cell:focus {
@@ -23,7 +24,7 @@
 
 /* Add this style for the sudoku-cell-container */
 .sudoku-cell-container {
-  position: relative;
+  position: relative; 
 }
 
 .pencil-marks {
@@ -41,3 +42,11 @@
   font-size: 9px;
 }
 
+/* Styling for shaded 3x3 subgrids */
+.sudoku-cell.subgrid-0,
+.sudoku-cell.subgrid-2,
+.sudoku-cell.subgrid-4,
+.sudoku-cell.subgrid-6,
+.sudoku-cell.subgrid-8 {
+  background-color: #f0e8e8; /* Change this to your desired shading color */
+}

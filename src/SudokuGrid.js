@@ -13,21 +13,28 @@ const SudokuBoard = () => {
     newBoard[rowIndex][colIndex] = value;
     setBoard(newBoard);
     console.log('Updated Board:', newBoard);
+
+    // Generate and update pencil marks for the entire board
+    const updatedPencilMarks = updatePencilMarks(newBoard);
+    setPencilMarks(updatedPencilMarks);
+    console.log('Updated Marks:', updatedPencilMarks);
   };
 
   const handleGenerateMarksClick = () => {
     setShowPencilMarks((prevShowPencilMarks) => !prevShowPencilMarks); // Toggle the showPencilMarks state
-    if (!showPencilMarks) {
-      const newPencilMarks = updatePencilMarks(board); // Call updatePencilMarks only if showPencilMarks is true
-      setPencilMarks(newPencilMarks);
-      console.log('Updated Marks:', newPencilMarks);
-    }
+  };
+
+  const getSubgridIndex = (rowIndex, colIndex) => {
+    const subgridRow = Math.floor(rowIndex / 3);
+    const subgridCol = Math.floor(colIndex / 3);
+    return subgridRow * 3 + subgridCol;
   };
 
   useEffect(() => {
     if (showPencilMarks) {
-      const newPencilMarks = updatePencilMarks(board); // Call updatePencilMarks only if showPencilMarks is true
-      setPencilMarks(newPencilMarks);
+      // Generate and update pencil marks for the entire board
+      const updatedPencilMarks = updatePencilMarks(board);
+      setPencilMarks(updatedPencilMarks);
     }
   }, [showPencilMarks, board]);
 
@@ -35,26 +42,31 @@ const SudokuBoard = () => {
     <div className="sudoku-board">
       {board.map((row, rowIndex) => (
         <div key={rowIndex} className="sudoku-row">
-          {row.map((cellValue, colIndex) => (
-            <div key={colIndex} className="sudoku-cell-container">
-              <input
-                type="text"
-                className="sudoku-cell"
-                value={cellValue}
-                maxLength={1}
-                onChange={(e) => handleCellChange(e, rowIndex, colIndex)}
-              />
-              {showPencilMarks && cellValue === '' && (
-                <div className="pencil-marks">
-                  {pencilMarks[rowIndex][colIndex].map((mark) => (
-                    <span key={mark} className="pencil-mark">
-                      {mark}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
+          {row.map((cellValue, colIndex) => {
+            const subgridIndex = getSubgridIndex(rowIndex, colIndex);
+          
+            return (
+              <div
+                key={colIndex} className= "sudoku-cell-container" >
+                <input
+                  type="text"
+                  className= {`sudoku-cell subgrid-${subgridIndex}`}
+                  value={cellValue}
+                  maxLength={1}
+                  onChange={(e) => handleCellChange(e, rowIndex, colIndex)}
+                />
+                {showPencilMarks && cellValue === '' && (
+                  <div className="pencil-marks">
+                    {pencilMarks[rowIndex][colIndex].map((mark) => (
+                      <span key={mark} className="pencil-mark">
+                        {mark}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       ))}
       <button onClick={handleGenerateMarksClick}>Generate Pencil Marks</button>

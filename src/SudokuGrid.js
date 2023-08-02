@@ -7,6 +7,13 @@ const SudokuBoard = () => {
   const [pencilMarks, setPencilMarks] = useState(Array.from({ length: 9 }, () => Array.from({ length: 9 }, () => [])));
   const [showPencilMarks, setShowPencilMarks] = useState(false);
 
+  const handleCellClick = (rowIndex, colIndex) => {
+    const cellInput = document.getElementById(`cell-${rowIndex}-${colIndex}`);
+    if (cellInput) {
+      cellInput.focus();
+    }
+  };
+
   const handleCellChange = (e, rowIndex, colIndex) => {
     const { value } = e.target;
     const newBoard = [...board];
@@ -44,13 +51,17 @@ const SudokuBoard = () => {
         <div key={rowIndex} className="sudoku-row">
           {row.map((cellValue, colIndex) => {
             const subgridIndex = getSubgridIndex(rowIndex, colIndex);
-          
+
             return (
               <div
-                key={colIndex} className= "sudoku-cell-container" >
+                key={colIndex}
+                className="sudoku-cell-container"
+                onClick={() => handleCellClick(rowIndex, colIndex)}
+              >
                 <input
+                  id={`cell-${rowIndex}-${colIndex}`}
                   type="text"
-                  className= {`sudoku-cell subgrid-${subgridIndex}`}
+                  className={`sudoku-cell subgrid-${subgridIndex}`}
                   value={cellValue}
                   maxLength={1}
                   onChange={(e) => handleCellChange(e, rowIndex, colIndex)}

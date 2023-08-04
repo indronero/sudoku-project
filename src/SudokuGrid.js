@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import './SudokuGrid.css';
-import { generatePencilMarks, updatePencilMarks, usePencilMarks } from './PencilMarking';
-import { generateRandomSudokuPuzzle } from './PuzzleGeneration';
+import { /*generatePencilMarks,*/ updatePencilMarks, usePencilMarks } from './PencilMarking';
+//import { generateRandomSudokuPuzzle } from './PuzzleGeneration';
 
 const SudokuBoard = () => {
   const [board, setBoard] = useState(Array.from({ length: 9 }, () => Array.from({ length: 9 }, () => '')));
   const { pencilMarks, setPencilMarks, showPencilMarks, setShowPencilMarks, handleGenerateMarksClick } = usePencilMarks();
-  const [showManualEntry, setShowManualEntry] = useState(false);
 
   const handleCellClick = (rowIndex, colIndex) => {
     const cellInput = document.getElementById(`cell-${rowIndex}-${colIndex}`);
@@ -18,26 +17,21 @@ const SudokuBoard = () => {
   const handleCellChange = (e, rowIndex, colIndex) => {
     const { value } = e.target;
     if (value === '' || /^[1-9]$/.test(value)) {
-      // Check if the input is empty or a single digit number from 1 to 9
       const newBoard = [...board];
       newBoard[rowIndex][colIndex] = value === '' ? '' : parseInt(value, 10);
       setBoard(newBoard);
-      console.log('Updated Board:', newBoard);
   
       // Generate and update pencil marks for the entire board
       const updatedPencilMarks = updatePencilMarks(newBoard);
       setPencilMarks(updatedPencilMarks);
-      console.log('Updated Marks:', updatedPencilMarks);
     }
   };
   
-  
-
   /*const handleGenerateMarksClick = () => {
-    setShowPencilMarks((prevShowPencilMarks) => !prevShowPencilMarks); // Toggle the showPencilMarks state
-  };*/
+      setShowPencilMarks((prevShowPencilMarks) => !prevShowPencilMarks); // Toggle the showPencilMarks state
+  };
 
-  const handleAutoGenerateClick = () => {
+    const handleAutoGenerateClick = () => {
     const puzzleString = generateRandomSudokuPuzzle();
     const generatedPuzzle = puzzleString
       .match(/.{9}/g)
@@ -47,13 +41,39 @@ const SudokuBoard = () => {
     setPencilMarks(updatedPencilMarks);
     setShowPencilMarks(true);
     setShowManualEntry(false);
-  };
+  };*/
 
-  const handleManualEntryClick = () => {
-    setShowPencilMarks(false);
-    setShowManualEntry(true);
+  const handleAutoGenerateClick = async () => {
+    try {
+      // Make an API call to fetch the Sudoku puzzle
+      const response = await fetch('https://sudoku-api.vercel.app/api/dosuku'); // Replace 'YOUR_API_URL' with the actual API endpoint
+      if (!response.ok) {
+        throw new Error('Failed to fetch the Sudoku puzzle. Please check the API endpoint or try again later.');
+      }
+  
+      // Parse the response and extract the 9x9 grid array
+      const data = await response.json();
+      const gridArray = data.newboard.grids[0].value;
+  
+      // Convert the grid array to the format expected by the board state
+      const generatedPuzzle = gridArray.map(row => row.map(value => (value === 0 ? '' : value)));
+  
+      // Set the generated puzzle to the board state
+      setBoard(generatedPuzzle);
+  
+      // Generate and update pencil marks for the entire board
+      const updatedPencilMarks = updatePencilMarks(generatedPuzzle);
+      setPencilMarks(updatedPencilMarks);
+  
+      // Set the state to show pencil marks and hide manual entry mode
+      setShowPencilMarks(false);
+      
+    } catch (error) {
+      console.error('Error fetching the Sudoku puzzle:', error.message);
+      // Handle error (e.g., show an error message to the user)
+    }
   };
-
+  
   const getSubgridIndex = (rowIndex, colIndex) => {
     const subgridRow = Math.floor(rowIndex / 3);
     const subgridCol = Math.floor(colIndex / 3);
@@ -65,7 +85,8 @@ const SudokuBoard = () => {
       const updatedPencilMarks = updatePencilMarks(board);
       setPencilMarks(updatedPencilMarks);
     }
-  }, [showPencilMarks, board]);
+  }, [showPencilMarks, board, setPencilMarks]);
+  
 
   return (
     <div className="sudoku-board">
@@ -88,7 +109,7 @@ const SudokuBoard = () => {
                   placeholder={cellValue !== '' ? cellValue : ''}
                   maxLength={1}
                   onChange={(e) => handleCellChange(e, rowIndex, colIndex)}
-                  readOnly={!showManualEntry || cellValue !== 10}
+                  readOnly={cellValue !== ''}
                 />
                 {showPencilMarks && cellValue === '' && (
                   <div className="pencil-marks">
@@ -106,10 +127,9 @@ const SudokuBoard = () => {
       ))}
       <button onClick={handleGenerateMarksClick}>Generate Pencil Marks</button>
       <button onClick={handleAutoGenerateClick}>Auto Generate Puzzle</button>
-      <button onClick={handleManualEntryClick}>Manual Entry Mode</button>
     </div>
   );
-  
 };
 
 export default SudokuBoard;
+

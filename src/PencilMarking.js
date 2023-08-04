@@ -1,3 +1,4 @@
+import { useState } from 'react';
 // Function to generate pencil marks for an empty cell
 export function generatePencilMarks(board, row, col) {
     if (board[row][col] !== '') {
@@ -39,4 +40,21 @@ export function updatePencilMarks(board) {
         })
     );
 }
+
+export const usePencilMarks = () => {
+  const [pencilMarks, setPencilMarks] = useState(Array.from({ length: 9 }, () => Array.from({ length: 9 }, () => [])));
+  const [showPencilMarks, setShowPencilMarks] = useState(false);
+
+  const handleGenerateMarksClick = () => {
+    setShowPencilMarks((prevShowPencilMarks) => !prevShowPencilMarks); // Toggle the showPencilMarks state
+  };
+
+  return {
+    pencilMarks,
+    setPencilMarks,
+    showPencilMarks,
+    setShowPencilMarks,
+    handleGenerateMarksClick,
+  };
+};
   

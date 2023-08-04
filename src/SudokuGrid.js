@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './SudokuGrid.css';
-import { generatePencilMarks, updatePencilMarks } from './SudokuUtils';
+import { generatePencilMarks, updatePencilMarks, usePencilMarks } from './PencilMarking';
+import { generateRandomSudokuPuzzle } from './PuzzleGeneration';
 
 const SudokuBoard = () => {
   const [board, setBoard] = useState(Array.from({ length: 9 }, () => Array.from({ length: 9 }, () => '')));
-  const [pencilMarks, setPencilMarks] = useState(Array.from({ length: 9 }, () => Array.from({ length: 9 }, () => [])));
-  const [showPencilMarks, setShowPencilMarks] = useState(false);
+  const { pencilMarks, setPencilMarks, showPencilMarks, setShowPencilMarks, handleGenerateMarksClick } = usePencilMarks();
+  const [showManualEntry, setShowManualEntry] = useState(false);
 
   const handleCellClick = (rowIndex, colIndex) => {
     const cellInput = document.getElementById(`cell-${rowIndex}-${colIndex}`);
@@ -16,19 +17,41 @@ const SudokuBoard = () => {
 
   const handleCellChange = (e, rowIndex, colIndex) => {
     const { value } = e.target;
-    const newBoard = [...board];
-    newBoard[rowIndex][colIndex] = value;
-    setBoard(newBoard);
-    console.log('Updated Board:', newBoard);
+    if (value === '' || /^[1-9]$/.test(value)) {
+      // Check if the input is empty or a single digit number from 1 to 9
+      const newBoard = [...board];
+      newBoard[rowIndex][colIndex] = value === '' ? '' : parseInt(value, 10);
+      setBoard(newBoard);
+      console.log('Updated Board:', newBoard);
+  
+      // Generate and update pencil marks for the entire board
+      const updatedPencilMarks = updatePencilMarks(newBoard);
+      setPencilMarks(updatedPencilMarks);
+      console.log('Updated Marks:', updatedPencilMarks);
+    }
+  };
+  
+  
 
-    // Generate and update pencil marks for the entire board
-    const updatedPencilMarks = updatePencilMarks(newBoard);
+  /*const handleGenerateMarksClick = () => {
+    setShowPencilMarks((prevShowPencilMarks) => !prevShowPencilMarks); // Toggle the showPencilMarks state
+  };*/
+
+  const handleAutoGenerateClick = () => {
+    const puzzleString = generateRandomSudokuPuzzle();
+    const generatedPuzzle = puzzleString
+      .match(/.{9}/g)
+      .map(row => row.split(''));
+    setBoard(generatedPuzzle);
+    const updatedPencilMarks = updatePencilMarks(generatedPuzzle);
     setPencilMarks(updatedPencilMarks);
-    console.log('Updated Marks:', updatedPencilMarks);
+    setShowPencilMarks(true);
+    setShowManualEntry(false);
   };
 
-  const handleGenerateMarksClick = () => {
-    setShowPencilMarks((prevShowPencilMarks) => !prevShowPencilMarks); // Toggle the showPencilMarks state
+  const handleManualEntryClick = () => {
+    setShowPencilMarks(false);
+    setShowManualEntry(true);
   };
 
   const getSubgridIndex = (rowIndex, colIndex) => {
@@ -39,7 +62,6 @@ const SudokuBoard = () => {
 
   useEffect(() => {
     if (showPencilMarks) {
-      // Generate and update pencil marks for the entire board
       const updatedPencilMarks = updatePencilMarks(board);
       setPencilMarks(updatedPencilMarks);
     }
@@ -51,7 +73,7 @@ const SudokuBoard = () => {
         <div key={rowIndex} className="sudoku-row">
           {row.map((cellValue, colIndex) => {
             const subgridIndex = getSubgridIndex(rowIndex, colIndex);
-
+  
             return (
               <div
                 key={colIndex}
@@ -62,9 +84,11 @@ const SudokuBoard = () => {
                   id={`cell-${rowIndex}-${colIndex}`}
                   type="text"
                   className={`sudoku-cell subgrid-${subgridIndex}`}
-                  value={cellValue}
+                  value={cellValue !== '' ? cellValue : ''}
+                  placeholder={cellValue !== '' ? cellValue : ''}
                   maxLength={1}
                   onChange={(e) => handleCellChange(e, rowIndex, colIndex)}
+                  readOnly={!showManualEntry || cellValue !== 10}
                 />
                 {showPencilMarks && cellValue === '' && (
                   <div className="pencil-marks">
@@ -81,8 +105,11 @@ const SudokuBoard = () => {
         </div>
       ))}
       <button onClick={handleGenerateMarksClick}>Generate Pencil Marks</button>
+      <button onClick={handleAutoGenerateClick}>Auto Generate Puzzle</button>
+      <button onClick={handleManualEntryClick}>Manual Entry Mode</button>
     </div>
   );
+  
 };
 
 export default SudokuBoard;

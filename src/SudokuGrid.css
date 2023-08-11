@@ -100,3 +100,15 @@ button {
 button {
   text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.2);
 }
+
+/* Styling for pencil marks */
+.sudoku-cell-container.active-pencil-mark input {
+  background-color: #f0f0f0; /* Background color for active pencil mark cell */
+}
+
+/* Styling for puzzle-generated cells */
+.sudoku-cell.puzzle-cell {
+  font-weight: bold; /* Apply bold font weight to puzzle-generated cells */
+  color: #000000; /* Apply black color to puzzle-generated cells */
+  background-color: #f5f5f5; /* Apply a light gray background color to puzzle-generated cells */
+}

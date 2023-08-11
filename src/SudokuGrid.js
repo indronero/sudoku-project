@@ -12,15 +12,13 @@ const SudokuBoard = () => {
   const [activeCell, setActiveCell] = useState(null);
 
   const handleCellClick = (rowIndex, colIndex) => {
-    const clickedCellValue = board[rowIndex][colIndex];
-  
     if (manualPencilMode) {
+      const clickedCellValue = manualPencilMarks[rowIndex][colIndex];
       if (clickedCellValue === '') {
         const newPencilMarks = [...manualPencilMarks];
         newPencilMarks[rowIndex][colIndex] = [];
         setManualPencilMarks(newPencilMarks);
       }
-      
       setActiveCell(`${rowIndex}-${colIndex}`);
     }
   };
@@ -127,11 +125,16 @@ const SudokuBoard = () => {
         <div key={rowIndex} className="sudoku-row">
           {row.map((cellValue, colIndex) => {
             const subgridIndex = getSubgridIndex(rowIndex, colIndex);
+            //bugs to fix
+            const isPencilMarkCell = manualPencilMode && activeCell === `${rowIndex}-${colIndex}`;
+            const cellClasses = `sudoku-cell subgrid-${subgridIndex} ${
+              isPencilMarkCell ? 'active-pencil-mark' : ''
+            } ${cellValue === '' ? 'puzzle-cell' : ''}`;
   
             return (
               <div
                 key={colIndex}
-                className="sudoku-cell-container"
+                className="cellClasses"
                 onClick={() => handleCellClick(rowIndex, colIndex)}
               >
                 {manualPencilMode ? (
@@ -146,6 +149,7 @@ const SudokuBoard = () => {
                   }
                   placeholder=""
                   onChange={(e) => handlePencilMarksChange(e, rowIndex, colIndex)}
+                  readOnly={cellValue !== '' }
                 />
               ) : (
                 <input
@@ -160,7 +164,7 @@ const SudokuBoard = () => {
                   placeholder={cellValue !== '' ? cellValue : ''}
                   maxLength={1}
                   onChange={(e) => handleCellChange(e, rowIndex, colIndex)}
-                  readOnly={cellValue !== '' && !manualPencilMode}
+                  readOnly={cellValue !== '' }
                   
                 />
               )}

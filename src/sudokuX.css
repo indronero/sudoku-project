@@ -1,0 +1,109 @@
+/* styles.css */
+
+.xudoku-game {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+  }
+  
+  .sudoku-grid {
+    display: grid;
+    grid-template-columns: repeat(9, 60px); /* Increase the width of each column */
+    grid-template-rows: repeat(9, 60px); /* Increase the height of each row */
+    gap: 1px; /* Reduce the gap between cells */
+    margin: auto;
+    border: none; /* Dark black border around entire grid */
+    width: max-content;
+  }
+   
+  
+  .row {
+    display: contents; /* Allows the children to maintain their placement within the grid */
+  }
+  
+  .cell {
+    position: relative;
+    width: 60px; /* Increase the width */
+    height: 60px; /* Increase the height */
+    text-align: center;
+    line-height: 60px;
+    font-size: 1.2em;
+    cursor: pointer;
+    border: none; /* Add a black border to all cells */
+  }
+  
+  .cell.empty {
+    background-color: #f5f5f5;
+  
+  }
+  
+  .cell.filled {
+    background-color: #e0e0e0;
+  }
+  
+  .cell.selected {
+    background-color: #fff;
+    
+  }
+  
+  .number-input {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  
+  .number-input button {
+    padding: 8px 15px;
+    font-size: 1em;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .number-input button:hover {
+    background-color: #8e9296;
+  }
+  
+  .new-game-button {
+    margin-top: 20px;
+    padding: 8px 15px;
+    font-size: 1em;
+    background-color: #e0e0e0;
+    color: #333;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .new-game-button:hover {
+    background-color: #ccc;
+  }
+
+  
+
+  .cell input {
+    width: 100%;
+    height: 100%;
+    border: 1px solid black;
+    font-size: inherit;
+    text-align: center;
+    background-color: white;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .cell.selected {
+    background-color: lightblue; /* Light blue background on hover or when selected */
+  }
+  
+ 
+  
+  
+  
+
+
+  

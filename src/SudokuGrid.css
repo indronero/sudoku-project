@@ -17,6 +17,7 @@
   font-size: 18px;
   outline: none;
   border: 1px solid #a09e9e;
+ 
 }
 
 .sudoku-cell:focus {
@@ -44,11 +45,11 @@
 }
 
 /* Styling for shaded 3x3 subgrids */
-.sudoku-cell.subgrid-0,
-.sudoku-cell.subgrid-2,
-.sudoku-cell.subgrid-4,
-.sudoku-cell.subgrid-6,
-.sudoku-cell.subgrid-8 {
+.subgrid-0,
+.subgrid-2,
+.subgrid-4,
+.subgrid-6,
+.subgrid-8 {
   background-color: #f0e8e8; /* Change this to your desired shading color */
 }
 
@@ -101,14 +102,28 @@ button {
   text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.2);
 }
 
-/* Styling for pencil marks */
-.sudoku-cell-container.active-pencil-mark input {
-  background-color: #f0f0f0; /* Background color for active pencil mark cell */
+.color-picker-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
 }
 
-/* Styling for puzzle-generated cells */
-.sudoku-cell.puzzle-cell {
-  font-weight: bold; /* Apply bold font weight to puzzle-generated cells */
-  color: #000000; /* Apply black color to puzzle-generated cells */
-  background-color: #f5f5f5; /* Apply a light gray background color to puzzle-generated cells */
+.color-picker-input {
+  width: 30px;
+  height: 30px;
+  border: none;
+  cursor: pointer;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  
 }
+
+.color-picker-input:focus {
+  outline: none;
+}
+
+.generated-cell {
+  background-color: rgba(247, 146, 5, 0.244);
+}
+

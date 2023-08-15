@@ -8,7 +8,8 @@
   }
   
   .sudoku-grid {
-    display: grid;
+    display: flex;
+    flex-direction: column;
     grid-template-columns: repeat(9, 60px); /* Increase the width of each column */
     grid-template-rows: repeat(9, 60px); /* Increase the height of each row */
     gap: 1px; /* Reduce the gap between cells */
@@ -30,7 +31,8 @@
     line-height: 60px;
     font-size: 1.2em;
     cursor: pointer;
-    border: none; /* Add a black border to all cells */
+    border: 1px solid #131212;
+    cursor: pointer;
   }
   
   .cell.empty {
@@ -48,7 +50,7 @@
   }
   
   .number-input {
-    display: flex;
+    display: row;
     justify-content: center;
     margin-top: 10px;
   }
@@ -64,7 +66,7 @@
   }
   
   .number-input button:hover {
-    background-color: #8e9296;
+    background-color: #e9eef3;
   }
   
   .new-game-button {
@@ -100,6 +102,81 @@
     background-color: lightblue; /* Light blue background on hover or when selected */
   }
   
+
+
+
+.cell.empty {
+  background-color: #f5f5f5;
+}
+
+.cell.filled {
+  background-color: #eee;
+}
+
+.cell.selected {
+  background-color: #c7e1f7;
+}
+
+.cell.diagonal-cell {
+  background-color: #ffc0cb; /* Set the background color you want for diagonal cells */
+}
+
+.row {
+  display: flex;
+}
+
+
+.new-game-button {
+  margin-top: 10px;
+  padding: 5px 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.new-game-button:hover {
+  background-color: #45a049;
+}
+
+
+
+
+.color-options {
+  display: flex;
+  margin-top: 10px;
+}
+
+.color-option {
+  width: 20px;
+  height: 20px;
+  border: none;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.color-option.selected {
+  border: 2px solid #000;
+}
+
+.color-markings {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.color-marking {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  font-size: 12px;
+  border: 1px solid #ccc;
+}
+
  
   
   

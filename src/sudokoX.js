@@ -1,23 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import './sudokuX.css'; // Make sure you have a styles.css file for styling
-
+import './sudokuX.css';
+import { generateCompletedGrid, applyXSudokuRules } from './puzzleGenerator';
 
 function XudokuGame() {
   const [board, setBoard] = useState(Array.from({ length: 9 }, () => Array.from({ length: 9 }, () => '')));
   const [selectedCell, setSelectedCell] = useState(null);
+
 
   useEffect(() => {
     generateNewGame();
   }, []);
 
   const generateNewGame = () => {
-    // Implement the logic to generate a new X Sudoku puzzle
-    // Set the generated puzzle to the board state
+    const newPuzzle = generateXSudokuPuzzle();
+    setBoard(newPuzzle);
   };
 
   const handleCellClick = (rowIndex, colIndex) => {
-    setSelectedCell({ row: rowIndex, col: colIndex });
+    if (board[rowIndex][colIndex] === '') {
+      setSelectedCell({ row: rowIndex, col: colIndex });
+    }
   };
+  
 
   const handleNumberInput = (number) => {
     if (selectedCell !== null) {
@@ -36,7 +40,10 @@ function XudokuGame() {
       setBoard(newBoard);
     }
   };
-  
+
+  const isDiagonalCell = (rowIndex, colIndex) => {
+    return rowIndex === colIndex || rowIndex === 8 - colIndex;
+  };
 
   return (
     <div className="xudoku-game">
@@ -44,30 +51,32 @@ function XudokuGame() {
         {board.map((row, rowIndex) => (
           <div key={rowIndex} className="row">
             {row.map((cellValue, colIndex) => (
-          <div
-          key={colIndex}
-          className={`
-            cell
-            ${selectedCell && selectedCell.row === rowIndex && selectedCell.col === colIndex ? 'selected' : ''}
-            ${cellValue === '' ? 'empty' : 'filled'}
-          `}
-          onClick={() => handleCellClick(rowIndex, colIndex)}
-        >
-          {cellValue === '' || (selectedCell && selectedCell.row === rowIndex && selectedCell.col === colIndex) ? (
-            <input
-              id={`cell-${rowIndex}-${colIndex}`}
-              type="text"
-              maxLength="1"
-              value={cellValue}
-              onChange={(e) => handleCellChange(e, rowIndex, colIndex)} // Use handleCellChange here
-              onFocus={(e) => e.target.select()} // Select input text when focused
-            />
-          ) : (
-            cellValue
-          )}
-        </div>
-        
-         
+              <div
+                key={colIndex}
+                className={`
+                  cell
+                  ${selectedCell && selectedCell.row === rowIndex && selectedCell.col === colIndex ? 'selected' : ''}
+                  ${cellValue === '' ? 'empty' : 'filled'}
+                  ${isDiagonalCell(rowIndex, colIndex) ? 'diagonal-cell' : ''}
+
+                `}
+                onClick={() => handleCellClick(rowIndex, colIndex)}
+              >
+                {cellValue === '' || (selectedCell && selectedCell.row === rowIndex && selectedCell.col === colIndex) ? (
+                  <input
+                    id={`cell-${rowIndex}-${colIndex}`}
+                    type="text"
+                    maxLength="1"
+                    value={cellValue}
+                    onChange={(e) => handleCellChange(e, rowIndex, colIndex)}
+                    onFocus={(e) => e.target.select()}
+                    readOnly={cellValue !== ''} // Set readOnly attribute
+
+                  />
+                ) : (
+                  cellValue
+                )}
+              </div>
             ))}
           </div>
         ))}
@@ -84,9 +93,19 @@ function XudokuGame() {
   );
 }
 
+const generateXSudokuPuzzle = () => {
+  const completedGrid = generateCompletedGrid();
+  const xSudokuGrid = applyXSudokuRules(completedGrid);
+  const newBoard = xSudokuGrid.map(row => row.map(cellValue => {
+    if (cellValue !== undefined) { // Add an undefined check here
+      return cellValue.toString();
+    }
+    return '';
+  }));
+
+  return newBoard;
+
+};
+
+
 export default XudokuGame;
-
-
-
-
-

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './SudokuGrid.css';
-import { generatePencilMarks, updatePencilMarks, usePencilMarks } from './PencilMarking';
+import { updatePencilMarks, usePencilMarks } from './PencilMarking';
 //import { generateRandomSudokuPuzzle } from './PuzzleGeneration';
 
 const SudokuBoard = () => {
@@ -13,7 +13,7 @@ const SudokuBoard = () => {
   const [activeCell, setActiveCell] = useState(null);
 
   const [manualPencilColors, setManualPencilColors] = useState(Array.from({ length: 9 }, () => Array.from({ length: 9 }, () => '')));
-  const [selectedColor, setSelectedColor] = useState('#000000'); // Default color
+  const [selectedColor, setSelectedColor] = useState('#000000'); 
 
   const applyColorToCell = (rowIndex, colIndex) => {
     if (manualPencilColors[rowIndex] && manualPencilColors[rowIndex][colIndex]) { // Check if the index exists
@@ -37,27 +37,30 @@ const SudokuBoard = () => {
 
   const handlePencilMarksChange = (e, rowIndex, colIndex) => {
     const { value } = e.target;
-    if (activeCell !== null) {
+    const isUserCell = userAnswers[rowIndex][colIndex] !== '';
+    const isGeneratedCell = generatedPuzzle[rowIndex][colIndex] !== '';
+  
+    if (activeCell !== null && manualPencilMode && !isUserCell && !isGeneratedCell) {
       const newManualPencilMarks = [...manualPencilMarks];
-      const newManualPencilColors = [...manualPencilColors]; // Add this line
-
+      const newManualPencilColors = [...manualPencilColors]; 
+  
       // Parse the input value and filter out non-numeric characters
       const newMarks = value.split('').filter(char => /\d/.test(char)).map(mark => parseInt(mark, 10));
-
+  
       // Update the manual pencil marks for the clicked cell
       newManualPencilMarks[rowIndex][colIndex] = newMarks;
-
+  
       // Set the color for the clicked cell using the selected color
-      newManualPencilColors[rowIndex][colIndex] = selectedColor; // Add this line
+      newManualPencilColors[rowIndex][colIndex] = selectedColor;
       setManualPencilColors(newManualPencilColors);
-
+  
       // Update the state with the new manual pencil marks
       setManualPencilMarks(newManualPencilMarks);
-
+  
       // Log the manual pencil marks for the clicked cell
       console.log(`Manual Pencil Marks for Cell [${rowIndex}][${colIndex}]:`, newMarks);
     }
-  };
+  };  
 
   const handleCellChange = (e, rowIndex, colIndex) => {
     const { value } = e.target;
@@ -158,7 +161,6 @@ const SudokuBoard = () => {
                     type="text"
                     className={`sudoku-cell subgrid-${subgridIndex} ${generatedPuzzle[rowIndex][colIndex] !== '' ? 'generated-cell' : ''}`}
                     style={{ color: manualPencilColors[rowIndex][colIndex] }}
-                    // bugs : causing non ideal editing 
                     value={
                       userAnswers[rowIndex][colIndex] !== ''
                         ? userAnswers[rowIndex][colIndex]

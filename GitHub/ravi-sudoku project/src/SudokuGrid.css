@@ -1,0 +1,119 @@
+/* SudokuGrid.css */
+
+.sudoku-board {
+  display: flex;
+  flex-direction: column;
+  width: 360px;
+  align-items: center;
+}
+
+.sudoku-row {
+  display: flex;
+}
+
+.sudoku-cell {
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  font-size: 18px;
+  outline: none;
+  border: 1px solid #a09e9e;
+  position: relative;
+}
+
+.sudoku-cell:focus {
+  border-color: #007bff;
+}
+
+.sudoku-cell-container {
+  position: relative;
+}
+
+.pencil-marks {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.pencil-mark {
+  display: inline-block;
+  width: 20%;
+  text-align: center;
+  font-size: 9px;
+  color: #672056;
+  font-weight: bold;
+}
+
+.subgrid-0,
+.subgrid-2,
+.subgrid-4,
+.subgrid-6,
+.subgrid-8 {
+  background-color: #f0e8e8;
+}
+
+button {
+  /* Button styles as before */
+}
+
+.color-picker-container {
+  /* Color picker container styles as before */
+}
+
+.color-picker-input {
+  /* Color picker input styles as before */
+}
+
+.generated-cell {
+  background-color: rgba(215, 155, 70, 0.244);
+}
+
+.manual-pencil-mark-cell {
+  position: relative;
+}
+
+.manual-pencil-mark-text {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  height: 30%;
+  width: 40%;
+  text-align: center;
+  letter-spacing: 1.2px;
+}
+
+/* Add arrows to the sudoku-cell */
+.sudoku-cell .arrow-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.sudoku-cell .arrow-icon {
+  font-size: 24px;
+}
+
+.sudoku-cell .arrow-container.arrow-left,
+.sudoku-cell .arrow-container.arrow-right {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.sudoku-cell .arrow-container.arrow-up,
+.sudoku-cell .arrow-container.arrow-down {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.sudoku-cell .arrow-container.arrow-left .arrow-icon {
+  transform: rotate(180deg);
+}

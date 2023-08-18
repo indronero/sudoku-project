@@ -5,7 +5,9 @@ import './App.css';
 const App = () => {
   return (
     <div className="app">
-      <h1>Indro's Sudoku Pad</h1>
+      <div className='header'>
+      <h1>Classic Sudoku</h1>
+      </div>
       <SudokuBoard />
     </div>
   );

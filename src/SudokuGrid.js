@@ -1,27 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import './SudokuGrid.css';
-import { updatePencilMarks, usePencilMarks } from './PencilMarking';
-//import { generateRandomSudokuPuzzle } from './PuzzleGeneration';
+import { updatePencilMarks, usePencilMarks } from './Pencil-Marking/PencilMarking';
+import { generateRandomSudokuPuzzle } from './PuzzleGeneration';
+import useManualPencilMarking from './Pencil-Marking/ManualPencilMarking';
+
 
 const SudokuBoard = () => {
   const [generatedPuzzle, setGeneratedPuzzle] = useState(Array.from({ length: 9 }, () => Array.from({ length: 9 }, () => '')));
   const [userAnswers, setUserAnswers] = useState(Array.from({ length: 9 }, () => Array.from({ length: 9 }, () => '')));
   const { pencilMarks, setPencilMarks, showPencilMarks, setShowPencilMarks, handleGenerateMarksClick } = usePencilMarks();
-
-  const [manualPencilMarks, setManualPencilMarks] = useState(Array.from({ length: 9 }, () => Array.from({ length: 9 }, () => [])));
-  const [manualPencilMode, setManualPencilMode] = useState(false);
-  const [activeCell, setActiveCell] = useState(null);
-
-  const [manualPencilColors, setManualPencilColors] = useState(Array.from({ length: 9 }, () => Array.from({ length: 9 }, () => '')));
-  const [selectedColor, setSelectedColor] = useState('#000000'); 
-
-  const applyColorToCell = (rowIndex, colIndex) => {
-    if (manualPencilColors[rowIndex] && manualPencilColors[rowIndex][colIndex]) { // Check if the index exists
-      const newManualPencilColors = [...manualPencilColors];
-      newManualPencilColors[rowIndex][colIndex] = selectedColor;
-      setManualPencilColors(newManualPencilColors);
-    }
-  };
+  const {manualPencilMarks, setManualPencilMarks, manualPencilMode, setManualPencilMode, setActiveCell, handlePencilMarksChange, applyColorToCell, selectedColor, setSelectedColor,manualPencilColors } = useManualPencilMarking(userAnswers, generatedPuzzle);
 
   const handleCellClick = (rowIndex, colIndex) => {
     if (manualPencilMode) {
@@ -35,64 +23,42 @@ const SudokuBoard = () => {
     }
   };
 
-  const handlePencilMarksChange = (e, rowIndex, colIndex) => {
-    const { value } = e.target;
-    const isUserCell = userAnswers[rowIndex][colIndex] !== '';
-    const isGeneratedCell = generatedPuzzle[rowIndex][colIndex] !== '';
-  
-    if (activeCell !== null && manualPencilMode && !isUserCell && !isGeneratedCell) {
-      const newManualPencilMarks = [...manualPencilMarks];
-      const newManualPencilColors = [...manualPencilColors]; 
-  
-      // Parse the input value and filter out non-numeric characters
-      const newMarks = value.split('').filter(char => /\d/.test(char)).map(mark => parseInt(mark, 10));
-  
-      // Update the manual pencil marks for the clicked cell
-      newManualPencilMarks[rowIndex][colIndex] = newMarks;
-  
-      // Set the color for the clicked cell using the selected color
-      newManualPencilColors[rowIndex][colIndex] = selectedColor;
-      setManualPencilColors(newManualPencilColors);
-  
-      // Update the state with the new manual pencil marks
-      setManualPencilMarks(newManualPencilMarks);
-  
-      // Log the manual pencil marks for the clicked cell
-      console.log(`Manual Pencil Marks for Cell [${rowIndex}][${colIndex}]:`, newMarks);
-    }
-  };  
-
   const handleCellChange = (e, rowIndex, colIndex) => {
     const { value } = e.target;
-    if (!manualPencilMode && value === '' || /^[1-9]$/.test(value)) {
+    if (value === '' || /^[1-9]$/.test(value)) {
       const newUserAnswers = [...userAnswers];
       newUserAnswers[rowIndex][colIndex] = value === '' ? '' : parseInt(value, 10);
       setUserAnswers(newUserAnswers);
       console.log('Updated userAnswers:', newUserAnswers);
-
+  
       // Generate and update pencil marks for the entire board
       const updatedPencilMarks = updatePencilMarks(newUserAnswers);
       setPencilMarks(updatedPencilMarks);
     }
   };
+  
 
-  /*const handleGenerateMarksClick = () => {
-      setShowPencilMarks((prevShowPencilMarks) => !prevShowPencilMarks); // Toggle the showPencilMarks state
-  };
-
-    const handleAutoGenerateClick = () => {
+  const handleAutoGenerateClick = () => {
     const puzzleString = generateRandomSudokuPuzzle();
+    
+    // Clear the userAnswers and manualPencilMarks array and generatedPuzzle
+    setUserAnswers(Array.from({ length: 9 }, () => Array.from({ length: 9 }, () => '')));
+    setManualPencilMarks(Array.from({ length: 9 }, () => Array.from({ length: 9 }, () => [])));
+
+    setGeneratedPuzzle(Array.from({ length: 9 }, () => Array.from({ length: 9 }, () => '')));
+  
     const generatedPuzzle = puzzleString
       .match(/.{9}/g)
-      .map(row => row.split(''));
-    setBoard(generatedPuzzle);
+      .map(row => row.split('').map(cell => (cell === '0' ? '' : cell))); // Convert '0' to empty string
+  
+    setGeneratedPuzzle(generatedPuzzle);
+  
     const updatedPencilMarks = updatePencilMarks(generatedPuzzle);
     setPencilMarks(updatedPencilMarks);
-    setShowPencilMarks(true);
-    setShowManualEntry(false);
-  };*/
+    setShowPencilMarks(false);
+  };  
 
-  const handleAutoGenerateClick = async () => {
+  /*const handleAutoGenerateClick = async () => {
     try {
       // Clear the userAnswers array
       setUserAnswers(Array.from({ length: 9 }, () => Array.from({ length: 9 }, () => '')));
@@ -125,7 +91,7 @@ const SudokuBoard = () => {
       console.error('Error fetching the Sudoku puzzle:', error.message);
       // Handle error (e.g., show an error message to the user)
     }
-  };
+  };*/
 
   const getSubgridIndex = (rowIndex, colIndex) => {
     const subgridRow = Math.floor(rowIndex / 3);
@@ -156,40 +122,76 @@ const SudokuBoard = () => {
                 onClick={() => handleCellClick(rowIndex, colIndex)}
               >
                 {manualPencilMode ? (
-                  <input
-                    id={`cell-${rowIndex}-${colIndex}`}
-                    type="text"
-                    className={`sudoku-cell subgrid-${subgridIndex} ${generatedPuzzle[rowIndex][colIndex] !== '' ? 'generated-cell' : ''}`}
-                    style={{ color: manualPencilColors[rowIndex][colIndex] }}
-                    value={
-                      userAnswers[rowIndex][colIndex] !== ''
-                        ? userAnswers[rowIndex][colIndex]
-                        : generatedPuzzle[rowIndex][colIndex] !== ''
-                          ? generatedPuzzle[rowIndex][colIndex]
-                          : manualPencilMarks[rowIndex][colIndex].map(mark => mark !== null ? mark : '').join(' ')
-                    }
-                    placeholder=""
-                    onChange={(e) => handlePencilMarksChange(e, rowIndex, colIndex)}
-                    readOnly={isOriginalCell && isUserCell}
-                  />
-                ) : (
-                  <input
-                    id={`cell-${rowIndex}-${colIndex}`}
-                    type="text"
-                    className={`sudoku-cell subgrid-${subgridIndex} ${generatedPuzzle[rowIndex][colIndex] !== '' ? 'generated-cell' : ''}`}
-                    style={{ color: manualPencilColors[rowIndex][colIndex] }}
-                    value={
-                      userAnswers[rowIndex][colIndex] !== ''
-                        ? userAnswers[rowIndex][colIndex]
-                        : manualPencilMarks[rowIndex][colIndex].map(mark => mark !== null ? mark : '').join(' ')
-                    }
-                    placeholder={cellValue !== '' ? cellValue : ''}
-                    maxLength={1}
-                    onChange={(e) => handleCellChange(e, rowIndex, colIndex)}
-                    readOnly={isOriginalCell}
-                  />
-                )}
-
+                    <div className={`manual-pencil-container ${manualPencilMarks[rowIndex][colIndex].length > 0 ? 'manual-pencil-mark' : ''}`}>
+                      <input
+                        id={`cell-${rowIndex}-${colIndex}`}
+                        type="text"
+                        className={`sudoku-cell subgrid-${subgridIndex} ${generatedPuzzle[rowIndex][colIndex] !== '' ? 'generated-cell' : ''} ${
+                          manualPencilMarks[rowIndex][colIndex].length > 0 ? 'manual-pencil-mark' : ''
+                        }`}                        
+                        //style={{color: '#33A7FF'}}
+                        value={
+                          userAnswers[rowIndex][colIndex] !== ''
+                            ? userAnswers[rowIndex][colIndex]
+                            : generatedPuzzle[rowIndex][colIndex] !== ''
+                              ? generatedPuzzle[rowIndex][colIndex]
+                              : manualPencilMarks[rowIndex][colIndex].map(mark => (mark !== null ? mark : '')).join(' ')
+                        }
+                        placeholder=""
+                        onChange={(e) => handlePencilMarksChange(e, rowIndex, colIndex)}
+                        readOnly={isOriginalCell && isUserCell}
+                      />
+                      {manualPencilMarks[rowIndex][colIndex].length > 0 && (
+                        <div 
+                        className="manual-pencil-mark-text"
+                        style={{
+                          color: manualPencilColors[rowIndex][colIndex]
+                        }}
+                        >
+                          {manualPencilMarks[rowIndex][colIndex].map((mark, index) => (
+                            <span key={index} className="manual-pencil-mark" >
+                              {mark !== null ? mark : ''}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                        <div className={`manual-pencil-container ${manualPencilMarks[rowIndex][colIndex].length > 0 ? 'manual-pencil-mark' : ''}`}>
+                          <input
+                            id={`cell-${rowIndex}-${colIndex}`}
+                            type="text"
+                            className={`sudoku-cell subgrid-${subgridIndex} ${generatedPuzzle[rowIndex][colIndex] !== '' ? 'generated-cell' : ''} ${
+                              manualPencilMarks[rowIndex][colIndex].length > 0 ? 'manual-pencil-mark' : ''
+                            }`}                  
+                            //style={{ color: manualPencilColors[rowIndex][colIndex] }}
+                            value={
+                              !manualPencilMode
+                                ? userAnswers[rowIndex][colIndex]
+                                : ''
+                            }
+                            placeholder={cellValue !== '' ? cellValue : ''}
+                            maxLength={1}
+                            onInput={(e) => handleCellChange(e, rowIndex, colIndex)}
+                            readOnly={isOriginalCell}
+                          />
+                            {manualPencilMarks[rowIndex][colIndex].length > 0 && (
+                              <div 
+                              className="manual-pencil-mark-text" 
+                              style={{
+                                color: manualPencilColors[rowIndex][colIndex]
+                              }}
+                              >
+                                {manualPencilMarks[rowIndex][colIndex].map((mark, index) => (
+                                  <span key={index} className="manual-pencil-mark">
+                                    {mark !== null ? mark : ''}
+                                  </span>
+                                ))}
+                              </div>
+                            )}
+                        </div>
+                      )
+              }
                 {showPencilMarks && cellValue === '' && (
                   <div className="pencil-marks">
                     {pencilMarks[rowIndex][colIndex].map((mark) => (

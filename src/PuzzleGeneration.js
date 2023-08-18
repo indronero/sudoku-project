@@ -1,8 +1,8 @@
 // PuzzleGeneration.js
-import { generatePencilMarks, updatePencilMarks, usePencilMarks } from './PencilMarking';
+import { generatePencilMarks, updatePencilMarks, usePencilMarks } from './Pencil-Marking/PencilMarking';
 
 // Function to generate a random Sudoku puzzle
-export function generateRandomSudokuPuzzle(difficulty = 0.5) {
+export function generateRandomSudokuPuzzle(difficulty = 0.7) {
   // Helper function to shuffle an array
   const shuffleArray = (arr) => {
     for (let i = arr.length - 1; i > 0; i--) {

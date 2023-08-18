@@ -2,7 +2,8 @@
   display: flex;
   flex-direction: column;
   width: 360px;
-  
+  align-items: center;
+
 }
 
 .sudoku-row {
@@ -10,8 +11,8 @@
 }
 
 .sudoku-cell {
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   text-align: center;
   border: 1px solid #ccc;
   font-size: 18px;
@@ -32,16 +33,18 @@
 .pencil-marks {
   position: absolute;
   top: 0;
-  right: 0;
+  left: 0;
   display: flex;
   flex-wrap: wrap;
 }
 
 .pencil-mark {
   display: inline-block;
-  width: 25%;
+  width: 20%;
   text-align: center;
   font-size: 9px;
+  color: #672056;
+  font-weight: bold;
 }
 
 /* Styling for shaded 3x3 subgrids */
@@ -71,7 +74,7 @@ button {
 
 /* Regular state */
 button {
-  background-color: #3498db;
+  background-color: #19747c;
 }
 
 /* Hover state */
@@ -82,7 +85,7 @@ button:hover {
 
 /* Active state */
 button:active {
-  background-color: #1c6ea4;
+  background-color: #1ca484;
   transform: scale(0.95);
 }
 
@@ -124,6 +127,29 @@ button {
 }
 
 .generated-cell {
-  background-color: rgba(247, 146, 5, 0.244);
+  background-color: rgba(215, 155, 70, 0.244);
 }
+
+/* SudokuGrid.css */
+
+.manual-pencil-mark-cell {
+  position: relative;
+}
+
+.manual-pencil-mark-text {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  height: 30%;
+  width: 40%;
+  text-align: center;
+  letter-spacing: 1.2px;
+  
+}
+
+
+
 

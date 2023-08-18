@@ -1,0 +1,186 @@
+/* styles.css */
+
+.xudoku-game {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+  }
+  
+  .sudoku-grid {
+    display: flex;
+    flex-direction: column;
+    grid-template-columns: repeat(9, 60px); /* Increase the width of each column */
+    grid-template-rows: repeat(9, 60px); /* Increase the height of each row */
+    gap: 1px; /* Reduce the gap between cells */
+    margin: auto;
+    border: none; /* Dark black border around entire grid */
+    width: max-content;
+  }
+   
+  
+  .row {
+    display: contents; /* Allows the children to maintain their placement within the grid */
+  }
+  
+  .cell {
+    position: relative;
+    width: 60px; /* Increase the width */
+    height: 60px; /* Increase the height */
+    text-align: center;
+    line-height: 60px;
+    font-size: 1.2em;
+    cursor: pointer;
+    border: 1px solid #131212;
+    cursor: pointer;
+  }
+  
+  .cell.empty {
+    background-color: #f5f5f5;
+  
+  }
+  
+  .cell.filled {
+    background-color: #e0e0e0;
+  }
+  
+  .cell.selected {
+    background-color: #fff;
+    
+  }
+  
+  .number-input {
+    display: row;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  
+  .number-input button {
+    padding: 8px 15px;
+    font-size: 1em;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .number-input button:hover {
+    background-color: #e9eef3;
+  }
+  
+  .new-game-button {
+    margin-top: 20px;
+    padding: 8px 15px;
+    font-size: 1em;
+    background-color: #e0e0e0;
+    color: #333;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .new-game-button:hover {
+    background-color: #ccc;
+  }
+
+  
+
+  .cell input {
+    width: 100%;
+    height: 100%;
+    border: 1px solid black;
+    font-size: inherit;
+    text-align: center;
+    background-color: white;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .cell.selected {
+    background-color: lightblue; /* Light blue background on hover or when selected */
+  }
+  
+
+
+
+.cell.empty {
+  background-color: #f5f5f5;
+}
+
+.cell.filled {
+  background-color: #eee;
+}
+
+.cell.selected {
+  background-color: #c7e1f7;
+}
+
+.cell.diagonal-cell {
+  background-color: #ffc0cb; /* Set the background color you want for diagonal cells */
+}
+
+.row {
+  display: flex;
+}
+
+
+.new-game-button {
+  margin-top: 10px;
+  padding: 5px 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.new-game-button:hover {
+  background-color: #45a049;
+}
+
+
+
+
+.color-options {
+  display: flex;
+  margin-top: 10px;
+}
+
+.color-option {
+  width: 20px;
+  height: 20px;
+  border: none;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.color-option.selected {
+  border: 2px solid #000;
+}
+
+.color-markings {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.color-marking {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  font-size: 12px;
+  border: 1px solid #ccc;
+}
+
+ 
+  
+  
+  
+
+
+  

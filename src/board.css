@@ -1,0 +1,32 @@
+/* killersudoku.css */
+
+/* Add styles for cages */
+.cage {
+    position: absolute;
+    border: 2px dashed #000; /* Dashed line border */
+  }
+  
+  /* Update the board style to position cages */
+  .board {
+    position: relative;
+  }
+  
+  /* Define cage styling for each cage configuration */
+  .cage.cage-0 {
+    top: 0;
+    left: 0;
+    width: 150px;
+    height: 150px;
+  }
+  
+  .cage.cage-1 {
+    top: 0;
+    left: 150px;
+    width: 150px;
+    height: 150px;
+  }
+  
+  /* Add more cage styles for each configuration */
+  
+  /* Other styles... */
+  

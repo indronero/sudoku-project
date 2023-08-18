@@ -1,0 +1,23 @@
+
+.score-container {
+    display: flex;
+    justify-content: space-between;
+    width: 300px;
+    margin-bottom: 20px;
+  }
+  
+  .score {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    color: #19747c;
+    
+  }
+  
+  .score-label {
+    font-weight: bold;
+    margin-right: 10px;
+    font-size: 90%;
+  }

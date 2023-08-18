@@ -1,8 +1,7 @@
-// PuzzleGeneration.js
-import { generatePencilMarks, updatePencilMarks, usePencilMarks } from './Pencil-Marking/PencilMarking';
+// Helper function to create a copy of the board
 
 // Function to generate a random Sudoku puzzle
-export function generateRandomSudokuPuzzle(difficulty = 0.7) {
+export function generateRandomSudokuPuzzle(difficulty = 0.2) {
   // Helper function to shuffle an array
   const shuffleArray = (arr) => {
     for (let i = arr.length - 1; i > 0; i--) {
@@ -53,6 +52,12 @@ export function generateRandomSudokuPuzzle(difficulty = 0.7) {
 
   // Start the backtracking to fill the Sudoku board
   solveSudokuBacktrack();
+  
+   // Create a copy of the solved Sudoku board before numbers are removed
+   const initialBoard = [];
+   for (let i = 0; i < 9; i++) {
+     initialBoard.push([...board[i]]);
+   }
 
   // Helper function to remove numbers from the solved Sudoku board based on difficulty
   const removeNumbersBasedOnDifficulty = (board, difficulty) => {
@@ -77,18 +82,29 @@ export function generateRandomSudokuPuzzle(difficulty = 0.7) {
 
   // Helper function to check if the board is solvable with a unique solution
   const isSolvable = (board) => {
-    // Implement your logic here to check if the board is solvable
-    // You can use the backtracking algorithm from the original solveSudokuBacktrack function to check solvability
-    // Return 0 if the board is not solvable
-    // Return 1 if the board has a unique solution
-    // Return 2 if the board has multiple solutions
-    // For now, we'll assume the board always has a unique solution
-    return 1;
+   /* const clonedBoard = JSON.parse(JSON.stringify(board));
+    // Try to solve the cloned board
+  if (solveSudokuBacktrack(clonedBoard)) {
+    // Check if the solution is unique
+    const solution2 = solveSudokuBacktrack(board.map((row) => [...row]));
+    if (solution2) {
+      return 2; // Multiple solutions
+    }*/
+    return 1; // Unique solution
+  /*} else {
+    return 0; // Not solvable
+  }*/
   };
 
   // Remove numbers from the solved Sudoku board based on difficulty
   removeNumbersBasedOnDifficulty(board, difficulty);
 
   // Convert the board to a string representation
-  return board.map((row) => row.join('')).join('');
+  const puzzleString = board.map((row) => row.join('')).join('');
+
+  // Convert the initial solved board to a string representation
+  const initialBoardString = initialBoard.map((row) => row.join('')).join('');
+
+  // Return the initial solved board string and the modified puzzle string
+  return { initialBoard: initialBoardString, puzzle: puzzleString };
 }

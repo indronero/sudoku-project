@@ -1,15 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import './SudokuGrid.css';
+import './Pencil-Marking/Pencil-Marking.css';
+import './ScoreSystem.css';
+
 import { updatePencilMarks, usePencilMarks } from './Pencil-Marking/PencilMarking';
 import { generateRandomSudokuPuzzle } from './PuzzleGeneration';
 import useManualPencilMarking from './Pencil-Marking/ManualPencilMarking';
+import useScoreSystem from './ScoreSystem';
 
 
 const SudokuBoard = () => {
   const [generatedPuzzle, setGeneratedPuzzle] = useState(Array.from({ length: 9 }, () => Array.from({ length: 9 }, () => '')));
+  const [copyPuzzle, setCopyPuzzle] = useState(Array.from({ length: 9 }, () => Array.from({ length: 9 }, () => '')));
   const [userAnswers, setUserAnswers] = useState(Array.from({ length: 9 }, () => Array.from({ length: 9 }, () => '')));
+  const [difficulty, setDifficulty] = useState(0.5); // Default difficulty level
+
+  
   const { pencilMarks, setPencilMarks, showPencilMarks, setShowPencilMarks, handleGenerateMarksClick } = usePencilMarks();
   const {manualPencilMarks, setManualPencilMarks, manualPencilMode, setManualPencilMode, setActiveCell, handlePencilMarksChange, applyColorToCell, selectedColor, setSelectedColor,manualPencilColors } = useManualPencilMarking(userAnswers, generatedPuzzle);
+  const { rightAnswers, wrongAnswers, increaseRightAnswers, increaseWrongAnswers } = useScoreSystem(); // Initialize the score system hook
 
   const handleCellClick = (rowIndex, colIndex) => {
     if (manualPencilMode) {
@@ -29,8 +38,18 @@ const SudokuBoard = () => {
       const newUserAnswers = [...userAnswers];
       newUserAnswers[rowIndex][colIndex] = value === '' ? '' : parseInt(value, 10);
       setUserAnswers(newUserAnswers);
-      console.log('Updated userAnswers:', newUserAnswers);
-  
+      
+      if (value !== '') {
+      // Check correctness of the answer
+      const correctAnswer = parseInt(copyPuzzle[rowIndex][colIndex], 10);
+      if (parseInt(value, 10) === correctAnswer) {
+        console.log('Correct answer');
+        increaseRightAnswers(); // Increment right answers
+      } else {
+        console.log('Wrong answer');
+        increaseWrongAnswers(); // Increment wrong answers
+      }
+    }
       // Generate and update pencil marks for the entire board
       const updatedPencilMarks = updatePencilMarks(newUserAnswers);
       setPencilMarks(updatedPencilMarks);
@@ -39,20 +58,30 @@ const SudokuBoard = () => {
   
 
   const handleAutoGenerateClick = () => {
-    const puzzleString = generateRandomSudokuPuzzle();
-    
+    const { initialBoard, puzzle } = generateRandomSudokuPuzzle(difficulty); // Get initialBoard and puzzle from generateRandomSudokuPuzzle()
+ 
     // Clear the userAnswers and manualPencilMarks array and generatedPuzzle
     setUserAnswers(Array.from({ length: 9 }, () => Array.from({ length: 9 }, () => '')));
     setManualPencilMarks(Array.from({ length: 9 }, () => Array.from({ length: 9 }, () => [])));
 
     setGeneratedPuzzle(Array.from({ length: 9 }, () => Array.from({ length: 9 }, () => '')));
-  
-    const generatedPuzzle = puzzleString
+    setCopyPuzzle(Array.from({ length: 9 }, () => Array.from({ length: 9 }, () => '')));
+
+    const generatedPuzzle = puzzle
       .match(/.{9}/g)
       .map(row => row.split('').map(cell => (cell === '0' ? '' : cell))); // Convert '0' to empty string
   
     setGeneratedPuzzle(generatedPuzzle);
+
+    const copyBoard = initialBoard
+    .match(/.{9}/g)
+    .map(row => row.split('').map(cell => (cell))); // Convert '0' to empty string
   
+    setCopyPuzzle(copyBoard);
+
+    console.log('Generated Puzzle:', generatedPuzzle);
+    console.log('Initial Board:', copyBoard);
+
     const updatedPencilMarks = updatePencilMarks(generatedPuzzle);
     setPencilMarks(updatedPencilMarks);
     setShowPencilMarks(false);
@@ -100,6 +129,12 @@ const SudokuBoard = () => {
   };
 
   useEffect(() => {
+    if (generatedPuzzle[0][0] !== '') {
+      handleAutoGenerateClick();
+    }
+  }, [difficulty]);
+
+  useEffect(() => {
     if (showPencilMarks) {
       const updatedPencilMarks = updatePencilMarks(userAnswers);
       setPencilMarks(updatedPencilMarks);
@@ -108,6 +143,14 @@ const SudokuBoard = () => {
 
   return (
     <div className="sudoku-board">
+      <div className="score-container">
+      <div className="score">
+       <span className="score-label">Right Answers:</span> {rightAnswers}
+      </div>
+      <div className="score">
+        <span className="score-label">Wrong Answers:</span> {wrongAnswers}
+      </div>
+    </div>
       {generatedPuzzle.map((row, rowIndex) => (
         <div key={rowIndex} className="sudoku-row">
           {row.map((cellValue, colIndex) => {
@@ -142,19 +185,19 @@ const SudokuBoard = () => {
                         readOnly={isOriginalCell && isUserCell}
                       />
                       {manualPencilMarks[rowIndex][colIndex].length > 0 && (
-                        <div 
-                        className="manual-pencil-mark-text"
-                        style={{
-                          color: manualPencilColors[rowIndex][colIndex]
-                        }}
-                        >
-                          {manualPencilMarks[rowIndex][colIndex].map((mark, index) => (
-                            <span key={index} className="manual-pencil-mark" >
-                              {mark !== null ? mark : ''}
-                            </span>
-                          ))}
-                        </div>
-                      )}
+                              <div 
+                              className="manual-pencil-mark-text" 
+                              style={{
+                                color: manualPencilColors[rowIndex][colIndex]
+                              }}
+                              >
+                                {manualPencilMarks[rowIndex][colIndex].map((mark, index) => (
+                                  <span key={index} className="manual-pencil-mark">
+                                    {mark !== null ? mark : ''}
+                                  </span>
+                                ))}
+                              </div>
+                        )}
                     </div>
                   ) : (
                         <div className={`manual-pencil-container ${manualPencilMarks[rowIndex][colIndex].length > 0 ? 'manual-pencil-mark' : ''}`}>
@@ -206,7 +249,21 @@ const SudokuBoard = () => {
           })}
         </div>
       ))}
+      <div className="difficulty-slider">
+      <div>Difficulty</div>
+      <input
+        type="range"
+        min="0.1"
+        max="0.9"
+        step="0.1"
+        value={difficulty}
+        id="difficultySlider"
+        onChange={(e) => setDifficulty(parseFloat(e.target.value))}
+      />
+      <span>{difficulty}</span>
+    </div>
       <div className="color-picker-container">
+        <div>Pencil Color</div>
         <input
           type="color"
           value={selectedColor}

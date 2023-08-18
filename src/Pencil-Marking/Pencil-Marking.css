@@ -1,0 +1,44 @@
+/* Pencil-Marking.css */
+
+/* Styles for manual pencil marks */
+
+.manual-pencil-mark-cell {
+position: relative;
+display: flex;
+align-items: center;
+justify-content: center;
+width: 20%;
+height: 40%;
+text-align: center;
+flex-wrap: wrap;
+}
+
+.manual-pencil-mark-text {
+position: absolute;
+bottom: 8%;
+left: 0;
+display: inline-block;
+font-size: 9px;
+font-weight: bold;
+letter-spacing: 1.2px;
+}
+
+  /* Styles for regular pencil marks */
+  
+.pencil-marks {
+position: absolute;
+top: 0;
+left: 0;
+display: flex;
+flex-wrap: wrap;
+}
+
+.pencil-mark {
+display: inline-block;
+width: 20%;
+text-align: center;
+font-size: 9px;
+color: #672056;
+font-weight: bold;
+}
+  

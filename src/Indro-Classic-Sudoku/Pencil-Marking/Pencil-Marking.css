@@ -16,7 +16,7 @@ flex-wrap: wrap;
 .manual-pencil-mark-text {
 position: absolute;
 bottom: 8%;
-left: 0;
+left: 6%;
 display: inline-block;
 font-size: 9px;
 font-weight: bold;
@@ -27,8 +27,8 @@ letter-spacing: 1.2px;
   
 .pencil-marks {
 position: absolute;
-top: 0;
-left: 0;
+top: 5%;
+left: 5%;
 display: flex;
 flex-wrap: wrap;
 }

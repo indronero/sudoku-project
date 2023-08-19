@@ -1,18 +1,6 @@
 import React from 'react';
-import { generateCompletedGrid } from './puzzleGenerator'; // Update the path
 
-function CageConfigGenerator({ numCages, onUpdateCageConfigs }) {
-  const handleGenerateCages = () => {
-    const newCageConfigs = GenerateCageConfigurations(numCages);
-    onUpdateCageConfigs(newCageConfigs);
-  };
 
-  return (
-    <div>
-      <button onClick={handleGenerateCages}>Generate Cages</button>
-    </div>
-  );
-}
  const cageGroupColors = [
     '#FF5733', '#33FFA8', '#3386FF', '#FF33A5', '#33FF33',
     '#FFC233', '#33C6FF', '#AA33FF', '#FF3389', '#33FF89'

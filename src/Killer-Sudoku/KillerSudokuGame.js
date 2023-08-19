@@ -18,7 +18,7 @@ function KillerSudokuGame() {
  
   
 const generateNewGame = () => {
-    const killerSudokuData = generateKillerSudokuPuzzle(5); // Change the number of cages if needed
+    const killerSudokuData = generateKillerSudokuPuzzle(5); 
     setBoard(killerSudokuData.puzzle);
     setCageConfigs(killerSudokuData.cageConfigs);
   };

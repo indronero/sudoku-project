@@ -1,0 +1,119 @@
+/* General styling for the game board */
+.sudoku-board {
+  display: flex;
+  flex-direction: column;
+  width: 360px;
+  align-items: center;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.sudoku-row {
+  display: flex;
+}
+
+/* Styling for each cell */
+.sudoku-cell-container {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  font-size: 18px;
+  outline: none;
+  border: 1px solid #a09e9e;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  background-color: #ffffff;
+}
+
+.sudoku-cell-container:focus {
+  border-color: #007bff;
+}
+
+.original-cell {
+  background-color: #e1e1e1;
+}
+
+/* Styling for pencil marks */
+.pencil-marks {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.pencil-mark {
+  display: inline-block;
+  width: 20%;
+  text-align: center;
+  font-size: 9px;
+  color: #672056;
+  font-weight: bold;
+}
+
+/* Styling for arrow icons */
+.arrow-icons-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.arrow-icon {
+  font-size: 20px;
+  color: #007bff;
+  cursor: pointer;
+}
+
+/* Color picker styling */
+.color-picker-container {
+  margin-top: 10px;
+}
+
+.color-picker-input {
+  width: 30px;
+  height: 30px;
+}
+
+/* Button styling */
+button {
+  margin-top: 10px;
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Comparison Sudoku Game styling */
+.comparison-sudoku-game {
+  text-align: center;
+  margin: 0 auto;
+  max-width: 500px;
+  padding: 20px;
+}
+
+/* Difficulty bar styling */
+.difficulty-bar {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.difficulty-bar label {
+  margin-right: 10px;
+}
+
+/* Styling for the check solution message */
+.solution-message {
+  font-weight: bold;
+  margin-top: 10px;
+}

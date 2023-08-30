@@ -1,8 +1,7 @@
 // PuzzleGeneration.js
 
-
-// Function to generate a random Sudoku puzzle
-export function generateRandomSudokuPuzzle(difficulty = 0.7) {
+// Function to generate a random Greater Than Sudoku puzzle
+export function generateRandomGreaterThanSudokuPuzzle(difficulty = 0.7) {
   // Helper function to shuffle an array
   const shuffleArray = (arr) => {
     for (let i = arr.length - 1; i > 0; i--) {
@@ -16,9 +15,9 @@ export function generateRandomSudokuPuzzle(difficulty = 0.7) {
   const isValidNumber = (board, row, col, num) => {
     for (let i = 0; i < 9; i++) {
       if (
-        board[row][i] === num ||
-        board[i][col] === num ||
-        board[Math.floor(row / 3) * 3 + Math.floor(i / 3)][Math.floor(col / 3) * 3 + (i % 3)] === num
+        board[row][i].number === num ||
+        board[i][col].number === num ||
+        board[Math.floor(row / 3) * 3 + Math.floor(i / 3)][Math.floor(col / 3) * 3 + (i % 3)].number === num
       ) {
         return false;
       }
@@ -26,22 +25,30 @@ export function generateRandomSudokuPuzzle(difficulty = 0.7) {
     return true;
   };
 
-  // Initialize an empty 9x9 Sudoku board
-  const board = Array.from({ length: 9 }, () => Array.from({ length: 9 }, () => 0));
+  // Initialize an empty 9x9 Greater Than Sudoku board
+  const board = Array.from({ length: 9 }, () =>
+    Array.from({ length: 9 }, () => ({
+      number: 0,
+      arrowTop: "<",
+      arrowRight: ">",
+      arrowBottom: ">",
+      arrowLeft: "<",
+    }))
+  );
 
-  // Helper function to fill the Sudoku board using backtracking
-  const solveSudokuBacktrack = () => {
+  // Helper function to fill the Greater Than Sudoku board using backtracking
+  const solveGreaterThanSudokuBacktrack = () => {
     for (let row = 0; row < 9; row++) {
       for (let col = 0; col < 9; col++) {
-        if (board[row][col] === 0) {
+        if (board[row][col].number === 0) {
           const nums = shuffleArray([1, 2, 3, 4, 5, 6, 7, 8, 9]);
           for (const num of nums) {
             if (isValidNumber(board, row, col, num)) {
-              board[row][col] = num;
-              if (solveSudokuBacktrack()) {
+              board[row][col].number = num;
+              if (solveGreaterThanSudokuBacktrack()) {
                 return true;
               }
-              board[row][col] = 0;
+              board[row][col].number = 0;
             }
           }
           return false;
@@ -51,73 +58,100 @@ export function generateRandomSudokuPuzzle(difficulty = 0.7) {
     return true;
   };
 
-  // Start the backtracking to fill the Sudoku board
-  solveSudokuBacktrack();
+  // Start the backtracking to fill the Greater Than Sudoku board
+  solveGreaterThanSudokuBacktrack();
 
-  // Helper function to remove numbers from the solved Sudoku board based on difficulty
+  // Logic for assigning arrows based on the numeric relations in Greater Than Sudoku
+  for (let row = 0; row < 8; row++) {
+    for (let col = 0; col < 8; col++) {
+      if (board[row][col].number > board[row + 1][col].number) {
+        board[row][col].arrowBottom = ">";
+        board[row + 1][col].arrowTop = "<";
+      } else {
+        board[row][col].arrowBottom = "<";
+        board[row + 1][col].arrowTop = ">";
+      }
+
+      if (board[row][col].number > board[row][col + 1].number) {
+        board[row][col].arrowRight = ">";
+        board[row][col + 1].arrowLeft = "<";
+      } else {
+        board[row][col].arrowRight = "<";
+        board[row][col + 1].arrowLeft = ">";
+      }
+    }
+  }
+
+  // Helper function to remove numbers from the solved Greater Than Sudoku board based on difficulty
   const removeNumbersBasedOnDifficulty = (board, difficulty) => {
     const cellsCount = 81;
     const cellsToRemove = Math.floor(cellsCount * difficulty);
     const cellsIndices = shuffleArray(Array.from({ length: cellsCount }, (_, index) => index));
-    
+
     for (let i = 0; i < cellsToRemove; i++) {
       const cellIndex = cellsIndices[i];
       const row = Math.floor(cellIndex / 9);
       const col = cellIndex % 9;
-      const temp = board[row][col];
-      board[row][col] = 0;
+      const temp = board[row][col].number;
+      board[row][col].number = 0;
 
       // Check if the board is still solvable with a unique solution
       const clonedBoard = JSON.parse(JSON.stringify(board));
       if (isSolvable(clonedBoard) !== 1) {
-        board[row][col] = temp; // Revert the removal if the board becomes unsolvable
+        board[row][col].number = temp; // Revert the removal if the board becomes unsolvable
       }
     }
   };
 
   // Helper function to check if the board is solvable with a unique solution
-  
   const isSolvable = (board) => {
-  const solveSudokuBacktrack = () => {
-    for (let row = 0; row < 9; row++) {
-      for (let col = 0; col < 9; col++) {
-        if (board[row][col] === 0) {
-          for (let num = 1; num <= 9; num++) {
-            if (isValidNumber(board, row, col, num)) {
-              board[row][col] = num;
-              if (solveSudokuBacktrack()) {
-                return true;
+    const solveGreaterThanSudokuBacktrack = () => {
+      for (let row = 0; row < 9; row++) {
+        for (let col = 0; col < 9; col++) {
+          if (board[row][col].number === 0) {
+            for (let num = 1; num <= 9; num++) {
+              if (isValidNumber(board, row, col, num)) {
+                board[row][col].number = num;
+                if (solveGreaterThanSudokuBacktrack()) {
+                  return true;
+                }
+                board[row][col].number = 0;
               }
-              board[row][col] = 0;
             }
+            return false;
           }
+        }
+      }
+      return true;
+    };
+
+    const isValidNumber = (board, row, col, num) => {
+      for (let i = 0; i < 9; i++) {
+        if (
+          board[row][i].number === num ||
+          board[i][col].number === num ||
+          board[Math.floor(row / 3) * 3 + Math.floor(i / 3)][Math.floor(col / 3) * 3 + (i % 3)].number === num
+        ) {
           return false;
         }
       }
-    }
-    return true;
+      return true;
+    };
+
+    // Call the solveGreaterThanSudokuBacktrack function to check solvability
+    return solveGreaterThanSudokuBacktrack() ? 1 : 0;
   };
 
-  const isValidNumber = (board, row, col, num) => {
-    for (let i = 0; i < 9; i++) {
-      if (
-        board[row][i] === num ||
-        board[i][col] === num ||
-        board[Math.floor(row / 3) * 3 + Math.floor(i / 3)][Math.floor(col / 3) * 3 + (i % 3)] === num
-      ) {
-        return false;
-      }
-    }
-    return true;
-  };
-
-  const clonedBoard = JSON.parse(JSON.stringify(board));
-  return solveSudokuBacktrack(clonedBoard) ? 1 : 0;
-};
-
-  // Remove numbers from the solved Sudoku board based on difficulty
+  // Remove numbers from the solved Greater Than Sudoku board based on difficulty
   removeNumbersBasedOnDifficulty(board, difficulty);
 
   // Convert the board to a string representation
-  return board.map((row) => row.join('')).join('');
+  return board.map((row) =>
+    row
+      .map(
+        (cell) =>
+          `${cell.number}${cell.arrowTop}${cell.arrowRight}${cell.arrowBottom}${cell.arrowLeft}`
+      )
+      .join("")
+  ).join("");
 }

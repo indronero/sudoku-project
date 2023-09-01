@@ -1,0 +1,28 @@
+[33m89cd947[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/indro-sudoku[m[33m, [m[1;32mindro-sudoku[m[33m)[m HEAD@{0}: checkout: moving from combined-sudoku to master
+[33m89cd947[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/indro-sudoku[m[33m, [m[1;32mindro-sudoku[m[33m)[m HEAD@{1}: checkout: moving from master to combined-sudoku
+[33m89cd947[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/indro-sudoku[m[33m, [m[1;32mindro-sudoku[m[33m)[m HEAD@{2}: merge indro-sudoku: Fast-forward
+[33m3d2d9a8[m[33m ([m[1;31morigin/master[m[33m)[m HEAD@{3}: checkout: moving from indro-sudoku to master
+[33m89cd947[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/indro-sudoku[m[33m, [m[1;32mindro-sudoku[m[33m)[m HEAD@{4}: commit: Created Folder before merging and fixed my node modules error
+[33m8139b63[m HEAD@{5}: commit: Modularized and improved CSS
+[33mbe23a0f[m HEAD@{6}: commit: Implemented ScoreSystem and Difficulty Slider
+[33m52dab74[m HEAD@{7}: commit: Adjusted and improved manual pencil marks. Created Pencil-Marking for modularization
+[33me8270d5[m HEAD@{8}: commit: Fixed color pencil marking and representation of puzzleGenerated and userAnswers in manual pencil mark mode
+[33m9683508[m HEAD@{9}: commit: Separated board into userAnswers & generatedPuzzle. Implemented colored manual pencil marking (bugs)
+[33m61052fe[m HEAD@{10}: commit: Fixed manual pencil marking but have styling bugs
+[33ma84256d[m HEAD@{11}: commit: Implemented manual pencil marking (still has bugs such as deletion when re-editing pencil mark and improper insertions of puzzle cells in manual pencil marking mode
+[33m8883396[m HEAD@{12}: commit: Fixed Puzzle generation using API, toggle Pencil Marking and input
+[33mb965066[m HEAD@{13}: commit: Implemented backtracking for Puzzle generation and updated SudokuGrid to be more modular and be able to display generated sudoku
+[33md572980[m HEAD@{14}: commit: Implemented new cell function to accept user input if they click anywhere in the cell
+[33me975b09[m HEAD@{15}: commit: Divided Grid into subgrids and implemented its representation
+[33mdb2fd47[m HEAD@{16}: commit: Added Sudoku Utils and implemented partial pencil marking
+[33ma4748f8[m HEAD@{17}: commit: Edited App.js to connect and display SudokuGrid
+[33m54eb473[m HEAD@{18}: checkout: moving from master to indro-sudoku
+[33m3d2d9a8[m[33m ([m[1;31morigin/master[m[33m)[m HEAD@{19}: checkout: moving from indro-sudoku to master
+[33m54eb473[m HEAD@{20}: pull origin indro-sudoku: Fast-forward
+[33m3d2d9a8[m[33m ([m[1;31morigin/master[m[33m)[m HEAD@{21}: checkout: moving from master to indro-sudoku
+[33m3d2d9a8[m[33m ([m[1;31morigin/master[m[33m)[m HEAD@{22}: checkout: moving from indro-sudoku to master
+[33m3d2d9a8[m[33m ([m[1;31morigin/master[m[33m)[m HEAD@{23}: reset: moving to origin/master
+[33m54eb473[m HEAD@{24}: commit: Added SudokuGrid.js and SudokuGrid.css with changes to App.js and its css
+[33m3d2d9a8[m[33m ([m[1;31morigin/master[m[33m)[m HEAD@{25}: checkout: moving from master to indro-sudoku
+[33m3d2d9a8[m[33m ([m[1;31morigin/master[m[33m)[m HEAD@{26}: reset: moving to HEAD
+[33m3d2d9a8[m[33m ([m[1;31morigin/master[m[33m)[m HEAD@{27}: commit (initial): Initial commit

@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense, lazy } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-//import reportWebVitals from './reportWebVitals';
+
+const ClassicSudokuApp = lazy(() => import('./Indro-Classic-Sudoku/App'));
+const KillerSudokuApp = lazy(() => import('./Killer-Sudoku/App'));
+const GreaterThanSudokuApp = lazy(() => import('./comparison sudoku/App'));
+
 
 const RootComponent = () => {
   const [selectedApp, setSelectedApp] = useState(null);
@@ -9,10 +13,11 @@ const RootComponent = () => {
   const renderApp = () => {
     switch (selectedApp) {
       case 'classic':
-        return import('./Indro-Classic-Sudoku/App').then((module) => <module.default />);
+        return <ClassicSudokuApp />;
       case 'killer':
-        return import('./Killer-Sudoku/App').then((module) => <module.default />);
-  
+        return <KillerSudokuApp />;
+      case 'GreaterThan':
+        return <GreaterThanSudokuApp />;
       default:
         return null;
     }
@@ -23,15 +28,13 @@ const RootComponent = () => {
       <div>
         <button onClick={() => setSelectedApp('classic')}>Classic Sudoku</button>
         <button onClick={() => setSelectedApp('killer')}>Killer Sudoku</button>
-        
+        <button onClick={() => setSelectedApp('GreaterThan')}>Greater/Lesser Sudoku</button>
       </div>
-      <React.Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<div>Loading...</div>}>
         {renderApp()}
-      </React.Suspense>
+      </Suspense>
     </React.StrictMode>
   );
 };
 
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<RootComponent />);
+ReactDOM.createRoot(document.getElementById('root')).render(<RootComponent />);

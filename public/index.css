@@ -30,18 +30,3 @@ div {
   text-align: center;
 }
 
-/* Styles for the header */
-.header {
-  position:absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  padding: 5px;
-  background-color: #cb6313;
-  color: #fff;
-  font-size: 2.5rem;
-  letter-spacing: 1px;
-  text-shadow: 2px 3px 4px rgba(0, 0, 0, 0.505);
-  border-radius: 0;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.563);
-}

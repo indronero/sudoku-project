@@ -75,7 +75,7 @@ const SudokuBoard = () => {
 
     const copyBoard = initialBoard
     .match(/.{9}/g)
-    .map(row => row.split('').map(cell => (cell))); // Convert '0' to empty string
+    .map(row => row.split('').map(cell => (cell))); 
   
     setCopyPuzzle(copyBoard);
 
@@ -92,7 +92,7 @@ const SudokuBoard = () => {
       // Clear the userAnswers array
       setUserAnswers(Array.from({ length: 9 }, () => Array.from({ length: 9 }, () => '')));
       // Make an API call to fetch the Sudoku puzzle
-      const response = await fetch('https://sudoku-api.vercel.app/api/dosuku'); // Replace 'YOUR_API_URL' with the actual API endpoint
+      const response = await fetch('https://sudoku-api.vercel.app/api/dosuku'); // API_URL
       if (!response.ok) {
         throw new Error('Failed to fetch the Sudoku puzzle. Please check the API endpoint or try again later.');
       }
@@ -142,7 +142,7 @@ const SudokuBoard = () => {
   }, [showPencilMarks, userAnswers, setPencilMarks]);
 
   return (
-    <div className="sudoku-board">
+    <div className="sudoku-board" data-testid="sudoku-board">
       <div className="score-container">
       <div className="score">
        <span className="score-label">Right Answers:</span> {rightAnswers}
@@ -249,7 +249,7 @@ const SudokuBoard = () => {
           })}
         </div>
       ))}
-      <div className="difficulty-slider">
+      <div className="difficulty-slider" >
       <div>Difficulty</div>
       <input
         type="range"
@@ -258,11 +258,12 @@ const SudokuBoard = () => {
         step="0.1"
         value={difficulty}
         id="difficultySlider"
+        data-testid="difficulty-slider"
         onChange={(e) => setDifficulty(parseFloat(e.target.value))}
       />
       <span>{difficulty}</span>
     </div>
-      <div className="color-picker-container">
+      <div className="color-picker-container" >
         <div>Pencil Color</div>
         <input
           type="color"
@@ -270,6 +271,7 @@ const SudokuBoard = () => {
           onChange={(e) => setSelectedColor(e.target.value)}
           onClick={applyColorToCell}
           className="color-picker-input"
+          data-testid="color-picker"
         />
       </div>
       <button onClick={() => setManualPencilMode(!manualPencilMode)}>

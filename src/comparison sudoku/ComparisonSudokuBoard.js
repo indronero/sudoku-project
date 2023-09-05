@@ -115,7 +115,6 @@ const ComparisonSudokuBoard = () => {
               <ComparisonSudokuCell
                 key={colIndex}
                 cellData={cellData}
-                subgridIndex={subgridIndex}
                 adjacentBorders={adjacentBorders}
                 manualPencilMode={manualPencilMode}
                 manualPencilColors={manualPencilColors}
@@ -148,7 +147,6 @@ const ComparisonSudokuBoard = () => {
         {manualPencilMode ? 'Exit Pencil Mode' : 'Enter Pencil Mode'}
       </button>
       <button onClick={handleGenerateMarksClick}>Generate Pencil Marks</button>
-      <button onClick={handleAutoGenerateClick}>Auto Generate Puzzle</button>
     </div>
   );
 };
